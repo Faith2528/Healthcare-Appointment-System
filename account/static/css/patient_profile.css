@@ -1,0 +1,171 @@
+body {
+    background: #f6f8fb;
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    min-height: 100vh;
+}
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 2px 0 16px rgba(26, 53, 92, 0.08);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: width 0.3s, background 0.3s;
+    backdrop-filter: blur(8px);
+}
+.sidebar.collapsed {
+    width: 60px;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: none;
+}
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1rem 1.2rem 1.2rem;
+}
+.ehr-logo {
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    text-align: center;
+}
+.sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #1a355c;
+    cursor: pointer;
+    outline: none;
+    margin-left: 0.5rem;
+}
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.2rem;
+    color: #1a355c;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    font-size: 1rem;
+}
+.sidebar-link.active,
+.sidebar-link:hover {
+    background: rgba(0,161,93,0.08);
+    color: rgb(0,161,93);
+}
+
+/* Make active/hover span full width when collapsed */
+.sidebar.collapsed .sidebar-link.active,
+.sidebar.collapsed .sidebar-link:hover {
+    width: 100%;
+    justify-content: center;
+    background: rgba(0,161,93,0.18);
+    border-radius: 8px;
+}
+.sidebar.collapsed .sidebar-text {
+    display: none;
+}
+.sidebar.collapsed {
+    width: 60px;
+}
+.sidebar.collapsed .sidebar-header {
+    justify-content: flex-end;
+    padding-left: 0;
+}
+.sidebar.collapsed .ehr-logo {
+    display: none;
+}
+.sidebar.collapsed .sidebar-toggle {
+    margin-left: 0;
+    display: block;
+}
+.sidebar.collapsed .sidebar-nav {
+    align-items: center;
+}
+.sidebar.collapsed .sidebar-link {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+.dashboard-content {
+    min-height: 100vh;
+    width: 100%;
+    margin-left: 0;
+    transition: filter 0.3s;
+}
+.sidebar-blur {
+    filter: blur(3px) brightness(0.97);
+    pointer-events: none;
+    user-select: none;
+}
+.sidebar.collapsed ~ .dashboard-content {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+}
+.dashboard-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: rgb(0, 161, 93);
+    height: 64px;
+    padding: 0 2rem;
+    box-shadow: 0 2px 12px rgba(26, 53, 92, 0.06);
+}
+.dashboard-user {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+.dashboard-user img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgb(0, 161, 93);
+}
+.dashboard-user span {
+    font-weight: 500;
+    color: #fff;
+    font-size: 18px;
+}
+.dashboard-main {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding-left: 32px !important; /* Add space ONLY when sidebar is expanded */
+}
+
+/* Remove the extra padding when sidebar is collapsed */
+.sidebar.collapsed ~ .dashboard-content .dashboard-main {
+    padding-left: 0 !important;
+}
+
+/* Responsive: remove padding on small screens */
+@media (max-width: 900px) {
+    .dashboard-main,
+    .sidebar.collapsed ~ .dashboard-content .dashboard-main {
+        padding-left: 0 !important;
+    }
+}
+

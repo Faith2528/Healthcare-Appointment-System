@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LE Dental Clinic - Book Appointment</title>
+    <!-- Flatpickr Calendar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'css/patient_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/appointment_policy.css' %}">
+    <link rel="stylesheet" href="{% static 'css/appointment_record.css' %}">
+    <link rel="stylesheet" href="{% static 'css/billing_summary.css' %}">
+</head>
+<body>
+    <!-- ===== Sidebar Navigation ===== -->
+    <aside class="sidebar collapsed" id="sidebar">
+        <div class="sidebar-header">
+            <span class="ehr-logo">LE Dental Clinic</span>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span id="sidebarToggleIcon">&#9776;</span>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link active"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
+            <a href="{% url 'appointment' %}" class="sidebar-link"><span>📅</span> <span class="sidebar-text">Appointment Records</span></a>
+            <a href="{% url 'profile' %}" class="sidebar-link"><span>👤</span> <span class="sidebar-text">Profile</span></a>
+            <a href="{% url 'appointment_policy' %}" class="sidebar-link"><span>📋</span> <span class="sidebar-text">Appointment Policy</span></a>
+        </nav>
+    </aside>
+
+{% block content %}
+{% endblock %}
+    <!-- ===== Scripts ===== -->
+    <!-- Flatpickr Calendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Custom JS for Appointment Form -->
+    <script src="{% static 'js/script1.js' %}"></script>
+</body>
+</html>
+

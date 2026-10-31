@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LE Dental Clinic</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+<body>
+    <!-- ===== Navbar ===== -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span class="ehr-logo">LE Dental Clinic</span>
+        </div>
+        <ul class="navbar-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- ===== Home Section ===== -->
+    <section class="home" id="home">
+        <div class="home_content">
+            <div class="welcome-container">
+                <h1>Welcome to LE Dental Clinic EHR</h1>
+                <p>
+                    Access your dental records, manage appointments, and stay connected with your dental care—all in one place.
+                </p>
+                <ul class="welcome-features">
+                    <li>✔ View and download your dental records</li>
+                    <li>✔ Book and manage dental appointments</li>
+                    <li>✔ Easy access from any device</li>
+                </ul>
+                <a href="#" class="cta-btn">Get Started</a>
+            </div>
+            <div class="welcome-image">
+                <img src="https://ledentalclinic.com/wp-content/uploads/2025/05/ledental_clinic_imus_cavite_IMG_5902-1024x768.jpeg" alt="clinic-people">
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== About Section ===== -->
+    <section class="about" id="about">
+        <div class="about_content">
+            <h2>About LE Dental Clinic </h2>
+            <p class="about-intro">
+                LE Dental Clinics system is built for dental patients like you. We believe everyone deserves easy, secure, and convenient access to their dental history, treatments, and appointments—all in one place.
+            </p>
+            <div class="about-features">
+                <div class="about-feature">
+                    <span class="about-icon">🛡️</span>
+                    <h3>Safe & Secure</h3>
+                    <p>Your privacy is our top priority. All your data is protected with advanced security measures.</p>
+                </div>
+                <div class="about-feature">
+                    <span class="about-icon">📱</span>
+                    <h3>Accessible Anywhere</h3>
+                    <p>View your health records and manage appointments from any device, anytime.</p>
+                </div>
+                <div class="about-feature">
+                    <span class="about-icon">🤝</span>
+                    <h3>Patient-Centered</h3>
+                    <p>We make it easy for you to communicate with your care team and stay informed about your health.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Services Section ===== -->
+    <section class="services" id="services">
+        <div class="services_content">
+            <h2>Our Services</h2>
+            <p class="services-intro">
+                We offer a wide range of dental services to keep your smile healthy and bright. Choose from our many treatments and let our team take care of your dental needs.
+            </p>
+            <div class="services-features">
+                <div class="service-feature">
+                    <span class="service-icon">📄</span>
+                    <h3>Complete Dental Records</h3>
+                    <p>Access all your dental history, x-rays, and treatment plans in one secure place—anytime you need them.</p>
+                </div>
+                <div class="service-feature">
+                    <span class="service-icon">⏰</span>
+                    <h3>Easy Appointment Scheduling</h3>
+                    <p>Book, view, or reschedule dental appointments with just a few clicks. Get reminders so you never miss a visit.</p>
+                </div>
+                <div class="service-feature">
+                    <span class="service-icon">🦷</span>
+                    <h3>Wide Range of Dental Services</h3>
+                    <p>Choose from preventive care, cleaning, fillings, tooth extraction, braces, whitening, dentures, and more—all provided by our experienced dental team.</p>
+                </div>
+                <div class="service-feature">
+                    <span class="service-icon">📊</span>
+                    <h3>Oral Health Tracking</h3>
+                    <p>Monitor your dental progress and receive personalized insights to help you maintain a healthy smile.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Contact Section ===== -->
+    <section class="contact" id="contact">
+        <div class="contact_content">
+            <h2>Contact Us</h2>
+            <p class="contact-intro">
+                Have questions or need help? Our support team is here for you. Send us a message and we’ll get back to you as soon as possible.
+            </p>
+            <div class="contact-flex">
+                <!-- Contact Form -->
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="How can we help you?" required></textarea>
+                    </div>
+                    <button type="submit" class="contact-btn">Send Message</button>
+                    <div class="contact-details">
+                        <p><strong>Email:</strong> ledentalhr@gmail.com</p>
+                        <p><strong>Phone:</strong>0920 948 3515</p>
+                    </div>
+                </form>
+                <!-- Map -->
+                <div class="contact-map">
+                    <iframe 
+                        width="425" 
+                        height="350" 
+                        src="https://www.openstreetmap.org/export/embed.html?bbox=120.95593214035036%2C14.408516273264954%2C120.95798671245576%2C14.410137321599358&amp;layer=mapnik" 
+                        style="border: 1px solid black"
+                        title="Clinic Location"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Scripts ===== -->
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

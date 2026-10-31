@@ -1,0 +1,71 @@
+    {% extends 'admin_base.html' %}
+    {% block title %} Clinic Admin Dashboard {% endblock %}
+
+    {% block content %}
+    
+    <!-- Main Dashboard Content -->
+    <div class="dashboard-content" id="dashboardContent">
+        <header class="dashboard-header">
+            <div class="dashboard-user">
+                <span>Welcome Admin!</span>
+                <!-- Logout Form -->
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <section class="admin-dashboard-overview">
+                <h2 class="admin-dashboard-title">Welcome back, Admin!</h2>
+                                <div class="admin-stats-row">
+<div class="admin-stat-card">
+    <h3>Total Patients</h3>
+    <div class="stat-value">{{ total_patients }}</div>
+</div>
+
+<div class="admin-stat-card">
+    <div style="display: flex; gap: 1rem; justify-content: space-between;">
+        <h3>Today's Appointments</h3>
+   </div>
+    <div class="stat-value">{{ todays_appointments }}</div>
+</div>
+
+<div class="admin-stat-card">
+    <div style="display: flex; gap: 1rem; justify-content: space-between;">
+        <h3>Pending Requests</h3>
+        <a href="{% url 'appointment_status' 'pending' %}" class="see-details-btn">See Details</a>
+    </div>
+    <div class="stat-value">{{ pending_count }}</div>
+</div>
+
+<div class="admin-stat-card">
+    <div style="display: flex; gap: 1rem; justify-content: space-between;">
+        <h3>Confirmed Requests</h3>
+        <a href="{% url 'appointment_status' 'confirm' %}" class="see-details-btn">See Details</a>
+    </div>
+    <div class="stat-value">{{ confirmed_count }}</div>
+</div>
+
+<div class="admin-stat-card">
+    <div style="display: flex; gap: 1rem; justify-content: space-between;">
+        <h3>Completed Appointments</h3>
+        <a href="{% url 'appointment_status' 'completed' %}"class="see-details-btn">See Details</a>
+    </div>
+    <div class="stat-value">{{ completed_count }}</div>
+</div>
+
+<div class="admin-stat-card">
+    <div style="display: flex; gap: 1rem; justify-content: space-between;">
+        <h3>No Show</h3>
+        <a href="{% url 'appointment_status' 'no-show' %}"class="see-details-btn">See Details</a>
+    </div>
+    <div class="stat-value">{{ no_show_count }}</div>
+</div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+    {% endblock %}

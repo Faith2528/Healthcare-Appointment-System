@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-content" id="dashboardContent">
+    <!-- ===== Header with User Info ===== -->
+    <header class="dashboard-header">
+        <div class="dashboard-user">
+            {% if Profile and Profile.image %}
+                <img id="navbarAvatar" src="{{ Profile.image.url }}" alt="User Avatar">
+            {% else %}
+                <img id="navbarAvatar" src="{% static 'img/default.png' %}" alt="Default Avatar">
+            {% endif %}
+            <span>Hi, {{username}}!</span>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="policy-container">
+            <h1>Appointment Booking, Rescheduling, Cancellation, and Walk-In Appointments Policy</h1>
+            <p class="policy-intro">This policy outlines how appointments are booked, rescheduled, and canceled in our Electronic Health Records (EHR) system, and how walk-in patients are handled. It also includes essential system requirements and communication guidelines.</p>
+            
+            <section class="policy-section">
+                <h2>Appointment Booking Policy</h2>
+                <p><strong>Booking Method:</strong> Patients can book appointments by selecting an available date and time using our online EHR portal.</p>
+                <p><strong>Slot Availability:</strong> All appointment slots are first-come, first-served.</p>
+                <ul>
+                    <li>A date/time slot is considered taken and unavailable for other bookings if it already has an appointment scheduled—regardless of its status (e.g., pending, confirmed, completed).</li>
+                    <li>Slots only become available again if the appointment is canceled by the patient (before confirmation) or by the clinic.</li>
+                    <li>A patient is not allowed to book for the same service on the same day. If they wish to book for the same service, they should select a different date.</li>
+                </ul>
+                <p class="tip">⚠️ <strong>Tip:</strong> Always check the calendar for open slots before planning your visit.</p>
+            </section>
+
+            <section class="policy-section">
+                <h2>Appointment Rescheduling Policy</h2>
+                <p>Direct rescheduling is not allowed. To change an appointment:</p>
+                <ul>
+                    <li>The patient must cancel their current appointment (only if it's not confirmed).</li>
+                    <li>Then, book a new appointment with the updated date and time.</li>
+                    <li>If the appointment is already confirmed, the patient must contact the clinic to request rescheduling.</li>
+                </ul>
+            </section>
+
+            <section class="policy-section">
+                <h2>Appointment Cancellation Policy</h2>
+                <h3>1. Cancellations by Patients</h3>
+                <ul>
+                    <li>Patients may cancel pending or unconfirmed appointments via the EHR portal.</li>
+                    <li>Confirmed appointments cannot be canceled directly by patients in the system.</li>
+                    <li>To cancel a confirmed appointment, patients must contact the clinic.</li>
+                    <li>If the patient fails to do so and does not attend the appointment, it will be marked as a no-show.</li>
+                </ul>
+
+                <h3>2. Cancellations by the Clinic</h3>
+                <p>The clinic may cancel any appointment due to:</p>
+                <ul>
+                    <li>Emergencies</li>
+                    <li>Provider unavailability</li>
+                    <li>Administrative adjustments</li>
+                </ul>
+                <p>If this occurs:</p>
+                <ul>
+                    <li>The patient will be notified via email.</li>
+                    <li>The email will include instructions to rebook a new appointment at their convenience.</li>
+                </ul>
+            </section>
+
+            <section class="policy-section">
+                <h2>Notification and Communication Policy</h2>
+                <p>The EHR system will automatically notify patients via email of the following appointment status changes:</p>
+                <ul>
+                    <li>Confirmed</li>
+                    <li>Completed</li>
+                    <li>Canceled</li>
+                    <li>Missed (No-show)</li>
+                </ul>
+                <p>To receive these updates, patients must:</p>
+                <ul>
+                    <li>Provide a valid and accessible email address during registration or appointment booking.</li>
+                </ul>
+                <p>Patients who wish to stay informed without logging into the EHR system are strongly encouraged to keep their email addresses up-to-date.</p>
+                <p class="warning">📢 The clinic is not responsible for missed updates due to invalid or inaccessible email accounts.</p>
+            </section>
+
+            <section class="policy-section">
+                <h2>Walk-In Appointment Policy</h2>
+                <p>To maintain accurate appointment records and ensure smooth patient flow, the following policy outlines how walk-in patients are handled within our Electronic Health Records (EHR) system.</p>
+
+                <h3>1. Walk-In Without an Existing Appointment</h3>
+                <p><strong>Patient Account Requirement:</strong><br>
+                All walk-in patients must have a registered clinic patient account in order to book an appointment through the EHR system.</p>
+
+                <h4>New Patients (No Account Yet):</h4>
+                <ul>
+                    <li>Patients who do not yet have a clinic account will be asked to register on-site during their visit.</li>
+                    <li>After registration, they must log in to the clinic's EHR system using their new credentials.</li>
+                </ul>
+
+                <h4>Booking the Appointment:</h4>
+                <ul>
+                    <li>Once logged in, the patient will be asked to book an appointment using the system interface.</li>
+                    <li>The system will record this appointment in the database, marking it as an official scheduled appointment for the day.</li>
+                </ul>
+                <p class="warning">⚠️ Walk-ins are still subject to availability. The clinic cannot guarantee immediate service if slots are fully booked.</p>
+
+                <h3>2. Walk-In With an Existing Appointment</h3>
+                <p><strong>Early Service Request:</strong><br>
+                If a walk-in patient already has a scheduled appointment but wishes to be seen earlier on the same day due to availability:</p>
+                <ul>
+                    <li>The patient must log in to their account via the clinic's system.</li>
+                    <li>They will then be required to cancel their originally scheduled appointment.</li>
+                    <li>After cancellation, they must book a new appointment that reflects the actual time and date of their walk-in.</li>
+                </ul>
+
+                <p>This process ensures:</p>
+                <ul>
+                    <li>Accurate and up-to-date appointment records.</li>
+                    <li>Proper slot management for both clinic staff and other patients.</li>
+                </ul>
+                <p class="warning">❗The original appointment must be cancelled in the system before the walk-in service is officially recognized and recorded.</p>
+
+                <h4>📌 Important Notes</h4>
+                <ul>
+                    <li>Clinic staff may assist with account creation or logging in, but patients are responsible for ensuring their appointment is properly entered into the system.</li>
+                    <li>Failure to book the walk-in appointment through the system may result in no official record, which can affect medical documentation and follow-ups.</li>
+                    <li>Appointments, even for walk-ins, are subject to availability of time slots and attending providers.</li>
+                </ul>
+            </section>
+
+            <section class="policy-section">
+                <h2>Other System Requirements and Concerns</h2>
+                <p>Patients must ensure they:</p>
+                <ul>
+                    <li>Maintain accurate contact information (especially email).</li>
+                    <li>Monitor their inbox (and spam/junk folder) for system messages.</li>
+                    <li>Contact the clinic for any assistance regarding booking, cancellation, or technical difficulties with the EHR portal.</li>
+                </ul>
+            </section>
+
+            <section class="policy-section contact-section">
+                <h2>📞 Contact Us</h2>
+                <p>For confirmed appointment cancellations, rescheduling assistance, or urgent matters, please reach out directly:</p>
+                <p class="contact-info">ledentalclinic0101@gmail.com or 09178211111</p>
+            </section>
+        </div>
+    </div>
+</div>
+
+<style>
+.policy-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.policy-container h1 {
+    color: #1a355c;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    line-height: 1.3;
+    text-align: justify;
+}
+
+.policy-intro {
+    color: #4a5568;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.policy-section {
+    margin-bottom: 2.5rem;
+}
+
+.policy-section h2 {
+    color: #2d3748;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.policy-section h3 {
+    color: #2d3748;
+    font-size: 1.2rem;
+    margin: 1.5rem 0 1rem;
+}
+
+.policy-section p {
+    color: #4a5568;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.policy-section ul {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.policy-section li {
+    color: #4a5568;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.tip, .warning {
+    background: #f7fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 4px solid #4299e1;
+}
+
+.warning {
+    border-left-color: #f56565;
+}
+
+.contact-section {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 3rem;
+}
+
+.contact-info {
+    font-size: 1.1rem;
+    color: #2d3748;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+strong {
+    color: #2d3748;
+}
+</style>
+{% endblock %} 

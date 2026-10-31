@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EHR System - Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Landing Page Navbar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span class="ehr-logo">LE Dental Clinic</span>
+        </div>
+        <ul class="navbar-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'home' %}">About Us</a></li>
+            <li><a href="{% url 'home' %}">Services</a></li>
+            <li><a href="{% url 'home' %}">Contact Us</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
+        </div>
+    </nav>
+    <section class="login-section">
+        <div class="login-flex">
+            <div class="login-message">
+                <h2>Welcome Back!</h2>
+                <p>
+                    Access your dental records, manage appointments, and stay connected with your dental care—all in one secure place.<br><br>
+Your privacy and oral health are our top priorities.
+                </p>
+                <img src="https://static.vecteezy.com/system/resources/previews/036/470/606/non_2x/cute-tooth-girl-character-in-cartoon-style-dental-personage-illustration-illustration-for-children-dentistry-happy-tooth-icon-vector.jpg" alt="EHR Welcome" />
+            </div>
+            <div class="login-container">
+                <div class="login-logo">
+                    <span class="ehr-logo">LE</span> Dental Clinic
+                </div>
+                <h2 class="login-title">Sign in to your account</h2>
+
+<form class="login-form" method="post">
+    {% if form.errors %}
+    <p style="color: red;">Invalid login credentials.</p>
+{% endif %}
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="login-username">Username</label>
+        <input type="text" id="login-username" name="username" placeholder="Enter your username" required autocomplete="username">
+    </div>
+    <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+    </div>
+    <button type="submit" class="login-btn-form">Login</button>
+</form>
+                <div class="login-links">
+                    <a href="#">Forgot password?</a> | <a href="{% url 'register' %}">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </section>
+   
+<script>
+
+</script>
+</body>
+</html>

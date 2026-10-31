@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Patient Dashboard | EHR Portal{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="dashboard-content" id="dashboardContent">
+        <!-- ===== Header with User Info ===== -->
+        <header class="dashboard-header">
+            <div class="dashboard-user">
+{% if Profile and Profile.image %}
+    <img id="navbarAvatar" src="{{ Profile.image.url }}" alt="User Avatar">
+{% else %}
+    <img id="navbarAvatar" src="{% static 'img/default.png' %}" alt="Default Avatar">
+{% endif %}   <span>Hi, {{username}}!</span>
+        <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="logout-btn">Logout</button>
+</form>
+
+</div>
+        </header>
+
+<main class="dashboard-main-grid">
+            <section class="dashboard-main-left">
+                <section class="dashboard-welcome">
+                    <h2>
+                        Welcome, {{username}}!
+                    </h2>
+                    <p>
+                        Here you can view your health records and manage your appointments.
+                    </p>
+                    <div class="dashboard-cards">
+                        <div class="dashboard-card">
+                            <a href="{% url 'appointment_policy' %}" style="text-decoration: none; color: inherit;">
+                            <span class="card-icon">📄</span>
+                            <h3>View Clinic's Policies</h3>
+                            <p>Read and understand the policies of our clinic's appointments booking, rescheduling, cancellation, and other system requirements.</p>
+                            </a>
+                        </div>
+                        <div class="dashboard-card">
+                            <a href="{% url 'appointment' %}" style="text-decoration: none; color: inherit;">
+                            <span class="card-icon">📅</span>
+                            <h3>Appointments</h3>
+                            <p>See detailed appointment records and upcoming visits</p>
+                        </a>
+                        </div>
+                    </div>
+                </section>
+            </section>
+                <aside class="dashboard-main-right">
+ <div class="doctor-status-container">
+    <div class="doctor-status-header">
+        <h3>Available Doctor</h3>
+    </div>
+    <div class="doctor-list">
+        {% for doctor in doctors %}
+        <div class="doctor-info" data-doctor="{{ doctor.profile.user.get_full_name|default:doctor.profile.user.username }}" data-email="{{ doctor.profile.user.email }}">
+            <img src="{% if doctor.profile.image %}{{ doctor.profile.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}" alt="Doctor Avatar" class="doctor-avatar">
+            <div class="doctor-details">
+                <div class="doctor-name">Dr. {{ doctor.profile.user.get_full_name|default:doctor.profile.user.username }}</div>
+                <div class="doctor-specialty">{{ doctor.specialization }}</div>
+            </div>
+            <div class="doctor-dropdown">
+                <button class="doctor-dropdown-btn" onclick="toggleDoctorDropdown(event, this)">⋮</button>
+                <div class="doctor-dropdown-menu">
+                    <button onclick="viewProfile('{{ doctor.profile.user.get_full_name|default:doctor.profile.user.username }}')">View Profile</button>
+                    
+                    <a href="{% url 'appointment_form' %}?doctor_id={{ doctor.id }}">
+                        <button type="button">Set Appointment</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No doctors available at the moment.</p>
+        {% endfor %}
+        <!-- Add more .doctor-info blocks for more doctors -->
+    </div>
+</div>
+                            <!-- Add more .doctor-info blocks for more doctors -->
+                        </div>
+                    </div>
+                    </div>
+                </aside>
+        </main>
+        </div>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EHR System - Register</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Landing Page Navbar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span class="ehr-logo">LE Dental Clinic</span>
+        </div>
+        <ul class="navbar-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'home' %}">About Us</a></li>
+            <li><a href="{% url 'home' %}">Services</a></li>
+            <li><a href="{% url 'home' %}">Contact Us</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Register Section -->
+    <section class="register-section">
+        <div class="register-flex">
+            <div class="register-message">
+                <h2>Join Our Patient Portal!</h2>
+                <p>
+                    Create your account to access your health records, manage appointments, and connect with your care team—all in one secure place.<br><br>
+                    Registration is quick, easy, and secure.
+                </p>
+                <img src="https://thumbs.dreamstime.com/b/cute-cartoon-dentist-brush-tooth-doctor-great-health-dental-care-concept-79369684.jpg" alt="EHR Register" />
+            </div>
+            <div class="register-container">
+                <div class="register-logo">
+                    <span class="ehr-logo">EHR</span> Patient Portal
+                </div>
+                <h2 class="register-title">Create your account</h2>
+
+                <form method="post" class="register-form">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+    <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+            <span style="color: red;">{{ field.errors.0 }}</span>
+        {% endif %}
+    </div>
+{% endfor %}
+
+
+                    {% if form.non_field_errors %}
+                        <div class="form-group">
+                            <span style="color: red;">{{ form.non_field_errors.0 }}</span>
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" class="register-btn-form">Register</button>
+                </form>
+
+                <div class="register-links">
+                    Already have an account? <a href="{% url 'login' %}">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const birthdayInput = document.getElementById('register-birthday');
+    const ageInput = document.getElementById('register-age');
+
+    // Prevent future birthdays
+    const today = new Date().toISOString().split("T")[0];
+    birthdayInput.max = today;
+
+    birthdayInput.addEventListener('change', function () {
+        const birthDate = new Date(birthdayInput.value);
+        const now = new Date();
+
+        if (!isNaN(birthDate)) {
+            let age = now.getFullYear() - birthDate.getFullYear();
+            const m = now.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && now.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            ageInput.value = age >= 0 ? age : '';
+        }
+    });
+});
+</script>
+
+
+</body>
+</html>

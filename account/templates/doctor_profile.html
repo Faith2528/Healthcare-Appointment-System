@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Dental Clinic - [Doctor Name] Profile</title>
+    <link rel="stylesheet" href="doctor_profile.css">
+</head>
+<body>
+    <!-- ===== Sidebar Navigation ===== -->
+    <aside class="sidebar collapsed" id="sidebar">
+        <div class="sidebar-header">
+            <span class="ehr-logo">LE Dental Clinic</span>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span id="sidebarToggleIcon">&#9776;</span>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="patient_dashboard.html" class="sidebar-link"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
+            <a href="#" class="sidebar-link"><span>📄</span> <span class="sidebar-text">Health Records</span></a>
+            <a href="appointment_records.html" class="sidebar-link"><span>📅</span> <span class="sidebar-text">Appointment Records</span></a>
+            <a href="patient_profile.html" class="sidebar-link"><span>👤</span> <span class="sidebar-text">Profile</span></a>
+        </nav>
+    </aside>
+
+    <!-- ===== Main Dashboard Content ===== -->
+    <div class="dashboard-content" id="dashboardContent">
+        <!-- ===== Header with User Info ===== -->
+        <header class="dashboard-header">
+            <div class="dashboard-user">
+                <img src="https://scontent.fmnl30-3.fna.fbcdn.net/v/t39.30808-6/469984245_3904115036572694_3646693016826261098_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=xdyaQbkjOhMQ7kNvwEZmkD3&_nc_oc=AdmsxP4klAV_wCHpzQ7e1JaOPJ4ZizGEsQ3yFW89XtgACT6xyslNpr2H6iQRUUHC-qw&_nc_zt=23&_nc_ht=scontent.fmnl30-3.fna&_nc_gid=fGB9mGtLdZ8dO7axjT7pWg&oh=00_AfPs91_CEwePyqV74c1NQnIvBvq8OJgK9W26xkkX9wVKdQ&oe=68490CC9" alt="Patient Avatar">
+                <span>Hi, [Username]!</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <!-- ===== Doctor Profile Section ===== -->
+            <section class="doctor-profile-container">
+                <div class="doctor-profile-card">
+                    <img class="doctor-avatar" src="https://scontent.fmnl30-3.fna.fbcdn.net/v/t39.30808-6/469984245_3904115036572694_3646693016826261098_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=xdyaQbkjOhMQ7kNvwEZmkD3&_nc_oc=AdmsxP4klAV_wCHpzQ7e1JaOPJ4ZizGEsQ3yFW89XtgACT6xyslNpr2H6iQRUUHC-qw&_nc_zt=23&_nc_ht=scontent.fmnl30-3.fna&_nc_gid=WnXrfrq8KMQYUk83H7KpFw&oh=00_AfOY0ukOf_X5ENbfAGh1N3IXWA0g9S9k0fzRgle6Epngxg&oe=68490CC9" alt="Doctor Avatar">
+                    <div class="doctor-info">
+                        <h2 class="doctor-name">Dr. Lhojen Faith Campos Bonganay</h2>
+                        <div class="doctor-specialization">
+                            <strong>Specialization:</strong> Core User
+                        </div>
+                        <div class="doctor-services">
+                            <strong>Services Offered:</strong>
+                            <ul>
+                                <li>Mag-mahal</li>
+                                <li>Mag-alaga</li>
+                                <li>Magpakain ng aso</li>
+                            </ul>
+                        </div>
+                        <div class="doctor-contact">
+                            <strong>Email:</strong> sagingsaba@gmail.com<br>
+                            <strong>Contact:</strong> 09XXXXXXXXX
+                        </div>
+                        <div class="doctor-bio">
+                            <strong>About:</strong>
+                            <p>
+                                bumubuhat ng apat, dumudurog ng lima, nagmamahal ng isa hi po, crush kita ???
+                            </p>
+                        </div>
+                        <button class="book-appointment-btn" onclick="window.location.href='appointment_form.html'">Book Appointment</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script1.js"></script>
+</body>
+</html>

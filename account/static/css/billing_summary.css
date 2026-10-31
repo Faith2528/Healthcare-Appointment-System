@@ -1,0 +1,96 @@
+/* Billing Summary Styles */
+.billing-summary-container {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e9ff;
+    width: 92%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.billing-summary-container h3 {
+    color: #1a355c;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.billing-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.billing-item {
+    flex: 1;
+    min-width: 200px;
+    background: white;
+    padding: 1.25rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.billing-item:hover {
+    transform: translateY(-2px);
+}
+
+.billing-label {
+    display: block;
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.billing-amount {
+    display: block;
+    color: #1a355c;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.billing-item.total {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.billing-item.total .billing-label {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.billing-item.total .billing-amount {
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* Animation for price updates */
+@keyframes priceUpdate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.price-updated {
+    animation: priceUpdate 0.3s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .billing-details {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .billing-item {
+        width: 100%;
+    }
+} 

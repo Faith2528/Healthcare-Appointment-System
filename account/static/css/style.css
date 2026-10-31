@@ -1,0 +1,977 @@
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-logo {
+    font-weight: bold;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.ehr-logo {
+    background: #fff;
+    color: rgb(0, 161, 93);
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
+    margin-right: 0.7em;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 18px;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.navbar-links li a::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: #fff;
+    transition: width 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+
+.navbar-links li a:hover::after {
+    width: 100%;
+}
+
+.navbar-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.login-btn,
+.signup-btn {
+    padding: 0.5em 1.2em;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+
+.login-btn {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.login-btn:hover {
+    background: #fff;
+    color: rgb(0, 161, 93);
+}
+
+.signup-btn {
+    background: #fff;
+    color: rgb(0, 161, 93);
+    border: none;
+}
+
+.signup-btn:hover {
+    background: rgb(0, 161, 93);
+    color: #ffffff;
+    border: 1px solid #fff;
+}
+
+.home {
+    width: 100%;
+    background: linear-gradient(100deg, #ffffff 70%, #ecfcf0 100%);
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.home::before {
+    content: "";
+    position: absolute;
+    left: 5%;
+    top: 10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle at 30% 30%, #ecfcf0  0%, transparent 70%);
+    opacity: 0.35;
+    z-index: 0;
+}
+
+.home::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle at 70% 70%, #ecfcf0  0%, transparent 80%);
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.home_content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 60px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 90vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.welcome-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 48px 40px;
+}
+
+.welcome-container h1 {
+    font-size: 2.3rem;
+    color:rgb(0, 161, 93);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.welcome-container p {
+    font-size: 1.15rem;
+    color: #333;
+    margin-bottom: 1.2rem;
+}
+
+.welcome-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-features li {
+    color: rgb(0, 161, 93);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.cta-btn {
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 0.7em 2em;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+    transition: background 0.2s;
+}
+
+.cta-btn:hover {
+    background: rgb(1, 131, 77);
+}
+
+.welcome-image {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-image img {
+    width: auto;
+    height: auto;
+    max-height: 500px;
+    max-width: 400px;
+    border-radius: 16px;
+    object-fit: contain;
+}
+
+.about {
+    width: 100%;
+    background: #ecfcf0 ;
+    padding: 60px 0 40px 0;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.about_content {
+    max-width: 1200px;
+    width: 100%;
+    min-height: 90vh;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(26, 53, 92, 0.07);
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.about_content h2 {
+    color: rgb(0, 161, 93);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.about-intro {
+    color: #2d3a4a;
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    max-width: 700px;
+}
+
+.about-features {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.about-feature {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(26, 53, 92, 0.06);
+    padding: 24px 20px;
+    flex: 1 1 220px;
+    min-width: 220px;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.about-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.7rem;
+}
+
+.about-feature h3 {
+    color: rgb(26, 53, 92);
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.about-feature p {
+    color: #2d3a4a;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Responsive for about section */
+@media (max-width: 900px) {
+    .about-features {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+    .about-feature {
+        max-width: 100%;
+    }
+}
+
+.services {
+    width: 100%;
+    background: #fdfdfd;
+    padding: 60px 0 40px 0;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.services_content {
+    max-width: 1280px;
+    width: 100%;
+    min-height: 90vh;
+    margin: 0 auto;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.services_content h2 {
+    color: rgb(0, 161, 93);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.services-intro {
+    color: #2d3a4a;
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    max-width: 700px;
+}
+
+.services-features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    gap: 2.5rem 3rem; /* More space between rows and columns */
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1.5rem 0 0 0;
+}
+
+.service-feature {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(26, 53, 92, 0.10);
+    padding: 32px 24px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+    margin: 0; /* Remove bottom margin for grid layout */
+}
+.service-feature:hover {
+    box-shadow: 0 8px 32px rgba(26, 53, 92, 0.15);
+    transform: translateY(-4px) scale(1.03);
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.service-feature h3 {
+    color: rgb(26, 53, 92);
+    font-size: 1.18rem;
+    margin-bottom: 0.7rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.service-feature p {
+    color: #2d3a4a;
+    font-size: 1.05rem;
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* Responsive for services section */
+@media (max-width: 900px) {
+    .services-features {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        max-width: 400px;
+        padding: 0;
+    }
+    .service-feature {
+        padding: 28px 16px;
+    }
+}
+
+.contact {
+    width: 100%;
+    background: #ecfcf0;
+    padding: 60px 0 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact_content {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(26, 53, 92, 0.07);
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact_content h2 {
+    color: rgb(0, 161, 93);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.contact-intro {
+    color: #2d3a4a;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.contact-flex {
+    display: flex;
+    gap: 2.5rem;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.contact-form {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 0;
+    max-width: 450px;
+}
+
+.contact-map {
+    flex: 1 1 0;
+    min-width: 260px;
+    min-height: 340px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-map iframe {
+    width: 100%;
+    height: 340px;
+    border-radius: 12px;
+    border: 1px solid #b0c4de;
+}
+
+.contact-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    color: rgb(26, 53, 92);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 0.7em 1em;
+    border: 1px solid #b0c4de;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f6f8fb;
+    color: #2d3a4a;
+    resize: none;
+    transition: border 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border: 1.5px solid rgb(26, 53, 92);
+    outline: none;
+}
+
+.contact-btn {
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 0.7em 2em;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.contact-btn:hover {
+    background: rgb(16, 133, 84);
+}
+
+.contact-details {
+    margin-top: 1.5rem;
+    color: #2d3a4a;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.contact-details strong {
+    color: rgb(0, 161, 93);
+}
+
+/* Responsive for contact section */
+@media (max-width: 900px) {
+    .contact-flex {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    .contact-map iframe {
+        height: 250px;
+    }
+}
+
+.home, .about, .services, .contact {
+    scroll-margin-top: 70px;
+}
+
+/* Login Section Styles (EHR, patient-friendly) */
+.login-section {
+    width: 100%;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(120deg, #f6f8fb 60%, #e3eaf6 100%);
+    padding: 60px 0;
+}
+
+.login-flex {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    min-height: 500px;
+    background: none; /* Remove background from flex wrapper */
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.login-message {
+    flex: 1 1 0;
+    background: #f6f8fb;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 48px 36px;
+    border-radius: 16px 0 0 16px;
+    margin-right: 10rem;
+    max-height: 500px;
+    margin-top: 10px;
+}
+
+.login-message h2 {
+    color: rgb(0, 161, 93);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.login-message p {
+    color: #2d3a4a;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.login-message img {
+    width: 100%;
+    max-width: 260px;
+    border-radius: 12px;
+    margin-top: 1rem;
+    box-shadow: 0 2px 12px rgba(26, 53, 92, 0.08);
+}
+
+.login-container {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 36px 36px 36px;
+    max-width: 450px;
+    width: 100%;
+    max-height: 500px;
+    background: #fff;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 0 4px 24px rgba(26, 53, 92, 0.10);
+}
+
+.login-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: rgb(0, 161, 93);
+    margin-bottom: 2rem;
+}
+
+.login-logo .ehr-logo {
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
+    margin-right: 0.7em;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.login-title {
+    font-size: 1.3rem;
+    color: rgb(0, 161, 93);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.login-form label {
+    color: rgb(0, 161, 93);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.login-form input {
+    padding: 0.7em 1em;
+    border: 1px solid rgb(0, 161, 93);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f6f8fb;
+    color: #2d3a4a;
+    transition: border 0.2s;
+}
+
+.login-form input:focus {
+    border: 1.5px solid rgb(0, 161, 93);
+    outline: none;
+}
+
+.login-btn-form {
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 0.7em 2em;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+}
+
+.login-btn-form:hover {
+    background:rgb(3, 131, 77);
+}
+
+.login-links {
+    margin-top: 1.2rem;
+    text-align: center;
+    font-size: 0.98rem;
+}
+
+.login-links a {
+    color: rgb(0, 161, 93);
+    text-decoration: underline;
+    margin: 0 0.5em;
+    transition: color 0.2s;
+}
+
+.login-links a:hover {
+    color: #125ea2;
+}
+
+@media (max-width: 500px) {
+    .login-container {
+        padding: 32px 8px 24px 8px;
+    }
+}
+
+@media (max-width: 900px) {
+    .login-flex {
+        flex-direction: column;
+        max-width: 98vw;
+        gap: 0;
+    }
+    .login-message,
+    .login-container {
+        border-radius: 16px;
+        max-width: 100%;
+        padding: 32px 16px;
+        margin: 0 0 16px 0;
+        box-shadow: 0 2px 12px rgba(26, 53, 92, 0.08);
+    }
+    .login-message {
+        margin-right: 0;
+        border-radius: 16px 16px 0 0;
+    }
+    .login-container {
+        border-radius: 0 0 16px 16px;
+    }
+}
+
+/* Register Section Styles (EHR, patient-friendly) */
+.register-section {
+    width: 100%;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(120deg, #f6f8fb 60%, #e3eaf6 100%);
+    padding: 60px 0;
+}
+
+.register-flex {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    min-height: 500px;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.register-message {
+    flex: 1 1 0;
+    background: #f6f8fb;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 48px 36px;
+    border-radius: 16px 0 0 16px;
+    margin-right: 10rem;
+    max-height: 500px;
+    margin-top: 30px;
+}
+
+.register-message h2 {
+    color: rgb(0, 161, 93);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.register-message p {
+    color: #2d3a4a;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.register-message img {
+    width: 100%;
+    max-width: 260px;
+    border-radius: 12px;
+    margin-top: 1rem;
+    box-shadow: 0 2px 12px rgba(26, 53, 92, 0.08);
+}
+
+.register-container {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 36px 36px 36px;
+    max-width: 450px;
+    width: 100%;
+    /* Remove max-height so content is not cut off */
+    background: #fff;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 0 4px 24px rgba(26, 53, 92, 0.10);
+    /* Add min-height for balance, but allow to grow */
+    min-height: 500px;
+    box-sizing: border-box;
+}
+
+.register-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: rgb(0, 161, 93);
+    margin-bottom: 2rem;
+}
+
+.register-logo .ehr-logo {
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
+    margin-right: 0.7em;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.register-title {
+    font-size: 1.3rem;
+    color: rgb(0, 161, 93);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.register-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.register-form .form-control {
+    padding: 0.7em 1em;
+    border: 1px solid rgb(0, 161, 93);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f6f8fb;
+    color: #2d3a4a;
+    transition: border 0.2s;
+}
+
+.register-form .form-control:focus {
+    border: 1.5px solid rgb(0, 161, 93);
+    outline: none;
+}
+
+
+.register-form label {
+    color: rgb(0, 161, 93);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.register-form input {
+    padding: 0.7em 1em;
+    border: 1px solid rgb(0, 161, 93);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f6f8fb;
+    color: #2d3a4a;
+    transition: border 0.2s;
+}
+
+.register-form input:focus {
+    border: 1.5px solid rgb(0, 161, 93);
+    outline: none;
+}
+
+.register-btn-form {
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 0.7em 2em;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+}
+
+.register-btn-form:hover {
+    background: rgb(3, 131, 77);
+}
+
+.register-links {
+    margin-top: 1.2rem;
+    text-align: center;
+    font-size: 0.98rem;
+}
+
+.register-links a {
+    color: rgb(0, 161, 93);
+    text-decoration: underline;
+    margin: 0 0.5em;
+    transition: color 0.2s;
+}
+
+.register-links a:hover {
+    color: #125ea2;
+}
+
+@media (max-width: 500px) {
+    .register-container {
+        padding: 32px 8px 24px 8px;
+    }
+}
+
+@media (max-width: 900px) {
+    .register-flex {
+        flex-direction: column;
+        max-width: 98vw;
+        gap: 0;
+    }
+    .register-message,
+    .register-container {
+        border-radius: 16px;
+        max-width: 100%;
+        padding: 32px 16px;
+        margin: 0 0 16px 0;
+        box-shadow: 0 2px 12px rgba(26, 53, 92, 0.08);
+    }
+    .register-message {
+        margin-right: 0;
+        border-radius: 16px 16px 0 0;
+    }
+    .register-container {
+        border-radius: 0 0 16px 16px;
+    }
+}

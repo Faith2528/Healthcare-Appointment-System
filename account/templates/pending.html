@@ -1,0 +1,96 @@
+    {% extends 'admin_base.html' %}
+    {% block title %} Pending {% endblock %}
+
+    {% block content %}
+    
+<!-- Main Dashboard Content -->
+<div class="dashboard-content" id="dashboardContent">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-user">
+            <span>Welcome!</span>
+            <!-- Logout Form -->
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Dashboard Main -->
+    <main class="dashboard-main">
+        <section class="admin-dashboard-overview">
+            <h2 class="admin-dashboard-title">Welcome back, Admin!</h2>
+
+<style>
+/* Match email font size with no-show table */
+.dashboard-table td:nth-child(2) {
+    font-size: 0.75rem;
+    color: #000;
+}
+</style>
+
+<!-- pending.html -->
+<div class="pending-appointments status-pending">
+  <div class="section-header">
+    <h3 class="section-title">Pending Appointments</h3>
+  </div>
+<form method="get" class="search-form">
+  <input type="text" name="q" placeholder="Search by patient, doctor, or email…" value="{{ request.GET.q }}">
+  <button type="submit">Search</button>
+</form>
+  <div class="table-scroll-x">
+
+    <table class="dashboard-table">
+      <thead>
+        <tr>
+          <th>Patient</th>
+          <th>Email</th>
+          <th>Doctor</th>
+          <th>Service</th>
+          <th>Sub-Service</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+            {% for appointment in appointments %}
+        <tr>
+  <td>{{ appointment.patient.profile.user.get_full_name|default:appointment.patient.profile.user.username }}</td>
+  <td>{{ appointment.patient.profile.user.email }}</td>
+  <td>{{ appointment.doctor.profile.user.get_full_name|default:appointment.doctor.profile.user.username }}</td>
+  <td>{{ appointment.service.name }} <span style="color: #059669;">(₱{{ appointment.service.price }})</span></td>
+  <td>{{ appointment.sub_service.SubService }} <span style="color: #059669;">(₱{{ appointment.sub_service.price }})</span></td>
+  <td>{{ appointment.appointment_date }}</td>
+  <td>{{ appointment.appointment_time|time:"h:i A" }}</td>
+          <td>
+            <span class="status-tag pending">{{ appointment.get_status_display }}</span>
+          </td>
+          <td><span style="color: #059669; font-weight: 600;">₱{{ appointment.service.price|add:appointment.sub_service.price }}</span></td>
+          <td>
+            <form method="post" action="{% url 'update_appointment_status' appointment.id %}" style="display:inline;">
+  {% csrf_token %}
+  <input type="hidden" name="status" value="confirm">
+  <input type="hidden" name="next_status_page" value="confirm">
+  <button type="submit" class="action-btn confirm">Confirm</button>
+</form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="10">No pending appointments found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+        </section>
+    </main>
+</div>
+    {% endblock %}

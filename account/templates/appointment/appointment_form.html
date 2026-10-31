@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book Appointment | LE Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="dashboard-content" id="dashboardContent">
+    <header class="dashboard-header">
+        <div class="dashboard-user">
+            {% if Profile and Profile.image %}
+                <img id="navbarAvatar" src="{{ Profile.image.url }}" alt="User Avatar">
+            {% else %}
+                <img id="navbarAvatar" src="{% static 'img/default.png' %}" alt="Default Avatar">
+            {% endif %}
+            <span>Hi, {{username}}!</span>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="appointment-main">
+        <div class="appointment-form-container">
+            <h2>Book an Appointment</h2>
+            <!-- Main Appointment Form -->
+            <form method="post" class="appointment-form">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                                <span class="required">*</span>
+                            {% endif %}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="book-appointment-btn">Book Appointment</button>
+            </form>
+
+            <!-- Billing Information Form - Moved to bottom -->
+            <div class="billing-summary-container">
+                
+                <div class="billing-details">
+                    <div class="billing-item">
+                        <span class="billing-label">Service Fee</span>
+                        <span class="billing-amount" id="serviceFee">₱0.00</span>
+                    </div>
+                    <div class="billing-item">
+                        <span class="billing-label">Sub-Service Fee</span>
+                        <span class="billing-amount" id="subServiceFee">₱0.00</span>
+                    </div>
+                    <div class="billing-item total">
+                        <span class="billing-label">Total Amount</span>
+                        <span class="billing-amount" id="totalAmount">₱0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Add JavaScript for billing summary updates -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceSelect = document.getElementById('id_service');
+    const subServiceSelect = document.getElementById('id_sub_service');
+    const serviceFeeElement = document.getElementById('serviceFee');
+    const subServiceFeeElement = document.getElementById('subServiceFee');
+    const totalAmountElement = document.getElementById('totalAmount');
+
+    function animateValue(element) {
+        element.classList.add('price-updated');
+        element.addEventListener('animationend', () => {
+            element.classList.remove('price-updated');
+        }, { once: true });
+    }
+
+    function updateBillingSummary() {
+        // Get the selected options
+        const serviceOption = serviceSelect.options[serviceSelect.selectedIndex];
+        const subServiceOption = subServiceSelect.options[subServiceSelect.selectedIndex];
+        
+        // Extract prices from the option text (e.g., "Service Name (₱100.00)")
+        let servicePrice = 0;
+        let subServicePrice = 0;
+
+        if (serviceOption && serviceOption.text) {
+            const match = serviceOption.text.match(/₱(\d+(\.\d{2})?)/);
+            if (match) {
+                servicePrice = parseFloat(match[1]);
+            }
+        }
+
+        if (subServiceOption && subServiceOption.text) {
+            const match = subServiceOption.text.match(/₱(\d+(\.\d{2})?)/);
+            if (match) {
+                subServicePrice = parseFloat(match[1]);
+            }
+        }
+
+        // Update the display with animation
+        const oldServiceFee = serviceFeeElement.textContent;
+        const oldSubServiceFee = subServiceFeeElement.textContent;
+        const oldTotal = totalAmountElement.textContent;
+
+        const newServiceFee = `₱${servicePrice.toFixed(2)}`;
+        const newSubServiceFee = `₱${subServicePrice.toFixed(2)}`;
+        const newTotal = `₱${(servicePrice + subServicePrice).toFixed(2)}`;
+
+        if (oldServiceFee !== newServiceFee) {
+            serviceFeeElement.textContent = newServiceFee;
+            animateValue(serviceFeeElement);
+        }
+
+        if (oldSubServiceFee !== newSubServiceFee) {
+            subServiceFeeElement.textContent = newSubServiceFee;
+            animateValue(subServiceFeeElement);
+        }
+
+        if (oldTotal !== newTotal) {
+            totalAmountElement.textContent = newTotal;
+            animateValue(totalAmountElement);
+        }
+    }
+
+    // Add event listeners
+    if (serviceSelect) {
+        serviceSelect.addEventListener('change', updateBillingSummary);
+    }
+    if (subServiceSelect) {
+        subServiceSelect.addEventListener('change', updateBillingSummary);
+    }
+
+    // Initialize billing summary
+    updateBillingSummary();
+});
+</script>
+{% endblock %}

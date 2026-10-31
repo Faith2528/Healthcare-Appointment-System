@@ -1,0 +1,320 @@
+    {% extends 'admin_base.html' %}
+    {% block title %} Confirmed {% endblock %}
+
+    {% block content %}
+    
+<!-- Main Dashboard Content -->
+<div class="dashboard-content" id="dashboardContent">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-user">
+            <span>Welcome!</span>
+            <!-- Logout Form -->
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Dashboard Main -->
+    <main class="dashboard-main">
+        <section class="admin-dashboard-overview">
+            <h2 class="admin-dashboard-title">Welcome back, Admin!</h2>
+
+<style>
+/* Match email font size with no-show table */
+.dashboard-table td:nth-child(2) {
+    font-size: 0.75rem;
+    color: #000;
+}
+</style>
+
+<!-- Confirmed Appointments Table -->
+<div class="confirmed-appointments status-confirm">
+  <div class="section-header">
+    <h3 class="section-title">Confirmed Appointments</h3>
+  </div>
+<form method="get" class="search-form">
+  <input type="text" name="q" placeholder="Search by patient, doctor, or email…" value="{{ request.GET.q }}">
+  <button type="submit">Search</button>
+</form>
+  <div class="table-scroll-x">
+    <table class="dashboard-table">
+      <!-- Toggle button (always visible) -->
+<tr class="expand-toggle" onclick="toggleHistory()" style="cursor:pointer;">
+  <td colspan="9">
+    <em id="history-toggle-label">Show previously confirmed appointments ▼</em>
+  </td>
+</tr>
+
+<!-- Hidden historical records (only the rows, not the button) -->
+<tbody id="historical-confirmed" style="display: none;">
+  {% for appointment in historical_confirmed %}
+  <tr class="historical">
+    <td>{{ appointment.patient.profile.user.get_full_name }}</td>
+    <td>{{ appointment.patient.profile.user.email }}</td>
+    <td>{{ appointment.doctor.profile.user.get_full_name }}</td>
+    <td>{{ appointment.service.name }} <span style="color: #059669;">(₱{{ appointment.service.price }})</span></td>
+    <td>{{ appointment.sub_service.SubService }} <span style="color: #059669;">(₱{{ appointment.sub_service.price }})</span></td>
+    <td>{{ appointment.appointment_date }}</td>
+    <td>{{ appointment.appointment_time|time:"h:i A" }}</td>
+    <td>{{ user.username}}</td>
+    <td><span class="status-tag">{{ appointment.get_status_display }}</span></td>
+    <td><span style="color: #059669; font-weight: 600;">₱{{ appointment.service.price|add:appointment.sub_service.price }}</span></td>
+    <td>{% for log in appointment.status_logs.all %}{% if log.new_status == 'confirm' %}{{ log.changed_at|date:"M d, Y" }} {{ log.changed_at|time:"h:i A" }}{% endif %}{% endfor %}</td>
+    <td><em>—</em></td>
+  </tr>
+  {% endfor %}
+</tbody>
+    </table>
+  <table class="dashboard-table">
+  <thead>
+    <tr>
+      <th>Patient</th>
+      <th>Email</th>
+      <th>Doctor</th>
+      <th>Service</th>
+      <th>Sub-Service</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Status</th>
+      <th>Total</th>
+      <th>Confirmed At</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for appointment in appointments %}
+    <tr>
+      <td>{{ appointment.patient.profile.user.get_full_name|default:appointment.patient.profile.user.username }}</td>
+      <td>{{ appointment.patient.profile.user.email }}</td>
+      <td>{{ appointment.doctor.profile.user.get_full_name|default:appointment.doctor.profile.user.username }}</td>
+      <td>{{ appointment.service.name }} <span style="color: #059669;">(₱{{ appointment.service.price }})</span></td>
+      <td>{{ appointment.sub_service.SubService }} <span style="color: #059669;">(₱{{ appointment.sub_service.price }})</span></td>
+      <td>{{ appointment.appointment_date }}</td>
+      <td>{{ appointment.appointment_time|time:"h:i A" }}</td>
+      <td>
+        <span class="status-tag confirm">{{ appointment.get_status_display }}</span>
+      </td>
+      <td><span style="color: #059669; font-weight: 600;">₱{{ appointment.service.price|add:appointment.sub_service.price }}</span></td>
+      <td>{% for log in appointment.status_logs.all %}{% if log.new_status == 'confirm' %}{{ log.changed_at|date:"M d, Y" }} {{ log.changed_at|time:"h:i A" }}{% endif %}{% endfor %}</td>
+      <td>
+        <form method="post" action="{% url 'update_appointment_status' appointment.id %}" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="completed">
+          <input type="hidden" name="next_status_page" value="completed">
+          <button type="submit" class="action-btn complete">Completed</button>
+        </form>
+        <form method="post" action="{% url 'update_appointment_status' appointment.id %}" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="no-show">
+          <input type="hidden" name="next_status_page" value="no-show">
+          <button type="submit" class="action-btn no-show">No Show</button>
+        </form>
+        <button type="button" class="action-btn cancel" onclick="showCancellationModal('{{ appointment.id }}')">Cancel</button>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="11">No confirmed appointments found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+  {% if historical_confirmed %}
+<!-- Main confirmed appointments -->
+<tbody>
+  {% for appointment in appointments %}
+  <tr>
+    <!-- normal confirmed appointment rows -->
+  </tr>
+  {% endfor %}
+</tbody>
+
+
+
+  {% endif %}
+</table>
+
+  </div>
+</div>
+
+
+        </section>
+    </main>
+</div>
+
+<!-- Notification Message -->
+<div id="notificationOverlay" class="alert-overlay" style="display:none;">
+    <div id="notificationMessage" class="alert-message">
+        <div class="alert-content">
+            <p class="alert-text">Please select a reason for cancellation:</p>
+            <select id="cancellationReason" class="alert-select">
+                <option value="">Select a reason...</option>
+                <option value="Patient-initiated Cancellation">Patient-initiated Cancellation</option>
+                <option value="Clinic Emergency/Adjustment/Conflict">Clinic Emergency/Adjustment/Conflict</option>
+                <option value="Violation of Policy">Violation of Policy</option>
+            </select>
+            <div class="alert-buttons">
+                <button onclick="proceedWithCancellation()" class="alert-btn proceed">Proceed</button>
+                <button onclick="closeNotification()" class="alert-btn cancel">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 53, 92, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    /* Eto yung blur HAHAHAHHAA Para di ko makalimutan */
+    backdrop-filter: blur(2px);
+}
+
+.alert-message {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 90%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.alert-content {
+    padding: 1.5rem;
+}
+
+.alert-text {
+    color: #1a355c;
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+}
+
+.alert-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.alert-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.alert-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.alert-btn.proceed {
+    background: #ef4444;
+    color: white;
+}
+
+.alert-btn.proceed:hover {
+    background: #dc2626;
+}
+
+.alert-btn.cancel {
+    background: #6b7280;
+    color: white;
+}
+
+.alert-btn.cancel:hover {
+    background: #4b5563;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<script>
+let currentAppointmentId = null;
+
+function showCancellationModal(appointmentId) {
+    currentAppointmentId = appointmentId;
+    document.getElementById('notificationOverlay').style.display = 'flex';
+    document.getElementById('cancellationReason').value = ''; // Reset selection
+}
+
+function closeNotification() {
+    document.getElementById('notificationOverlay').style.display = 'none';
+    currentAppointmentId = null;
+}
+
+function proceedWithCancellation() {
+    const reason = document.getElementById('cancellationReason').value;
+    if (!reason) {
+        alert('Please select a reason for cancellation.');
+        return;
+    }
+
+    // Get CSRF token
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Send cancellation request
+    fetch(`/appointments/${currentAppointmentId}/update/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+            status: 'cancelled',
+            reason: reason,
+            next_status_page: 'cancelled'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload(); // Refresh the page to show updated status
+        } else {
+            alert('Failed to cancel appointment. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while cancelling the appointment.');
+    })
+    .finally(() => {
+        closeNotification();
+    });
+}
+
+// Close notification if clicking outside
+window.onclick = function(event) {
+    const overlay = document.getElementById('notificationOverlay');
+    if (event.target === overlay) {
+        closeNotification();
+    }
+}
+</script>
+
+    {% endblock %}

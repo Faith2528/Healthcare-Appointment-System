@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Appointment Records{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboard' %}" class="sidebar-link"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
+            <a href="{% url 'appointment' %}" class="sidebar-link active"><span>📅</span> <span class="sidebar-text">Appointment Records</span></a>
+            <a href="{% url 'profile' %}" class="sidebar-link"><span>👤</span> <span class="sidebar-text">Profile</span></a>
+{% endblock %}
+{% block content %}
+ <div class="dashboard-content" id="dashboardContent">
+        <!-- ===== Header with User Info ===== -->
+        <header class="dashboard-header">
+            <div class="dashboard-user">
+{% if Profile and Profile.image %}
+    <img id="navbarAvatar" src="{{ Profile.image.url }}" alt="User Avatar">
+{% else %}
+    <img id="navbarAvatar" src="{% static 'img/default.png' %}" alt="Default Avatar">
+{% endif %}    <span>Hi, {{username}}!</span>
+        <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="logout-btn">Logout</button>
+</form>
+
+</div>
+        </header>
+        <main class="dashboard-main">
+            <label class="page-label" for="appointment-records-section">Appointment Records</label>
+            <section class="appointment-records-section" id="appointment-records-section">
+                <!-- ===== Tabs for Appointment Status ===== -->
+                <div class="appointment-records-header">
+<div class="appointment-records-tabs">
+    <button class="tab-btn active" data-tab="pending">Pending</button>
+    <button class="tab-btn" data-tab="confirm">Confirm</button>
+    <button class="tab-btn" data-tab="past">Completed</button>
+</div>
+
+</div>
+
+
+<div class="appointment-records-list" id="pending-appointments" style="display: block;">
+    {% for appointment in appointments %}
+    {% if appointment.status == 'pending' %}
+    <div class="appointment-card pending" data-appointment-id="{{ appointment.id }}">
+        <div class="appointment-info">
+            <span class="date">{{ appointment.appointment_date|date:"F j, Y" }}</span>
+            <span class="time">{{ appointment.appointment_time|time:"g:i A" }}</span>
+            <span class="doctor">{{ appointment.doctor.profile }}</span>
+            <span class="service"
+                data-service="{{ appointment.service.name|default:'N/A' }}"
+                data-service-price="{{ appointment.service.price|default_if_none:'0' }}"
+                data-sub-service="{{ appointment.sub_service.SubService|default:'N/A' }}"
+                data-sub-price="{{ appointment.sub_service.price|default_if_none:'0' }}">
+                {{ appointment.service.name }}
+            </span>
+        </div>
+        <div class="appointment-actions">
+            <span class="status upcoming">{{ appointment.status }}</span>
+            <button class="view-btn" onclick="viewAppointmentDetails(this)">View Details</button>
+            <button class="cancel-btn" onclick="cancelAppointment(this)">Cancel</button>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<div class="appointment-records-list" id="confirm-appointments" style="display: none;">
+    {% for appointment in appointments %}
+    {% if appointment.status == 'confirm' %}
+    <div class="appointment-card confirm" data-appointment-id="{{ appointment.id }}">
+        <div class="appointment-info">
+            <span class="date">{{ appointment.appointment_date|date:"F j, Y" }}</span>
+            <span class="time">{{ appointment.appointment_time|time:"g:i A" }}</span>
+            <span class="doctor">{{ appointment.doctor.profile }}</span>
+            <span class="service"
+                data-service="{{ appointment.service.name|default:'N/A' }}"
+                data-service-price="{{ appointment.service.price|default_if_none:'0' }}"
+                data-sub-service="{{ appointment.sub_service.SubService|default:'N/A' }}"
+                data-sub-price="{{ appointment.sub_service.price|default_if_none:'0' }}">
+                {{ appointment.service.name }}
+            </span>
+        </div>
+        <div class="appointment-actions">
+            <span class="status upcoming">{{ appointment.status }}</span>
+            <button class="view-btn" onclick="viewAppointmentDetails(this)">View Details</button>
+            <button class="cancel-btn" onclick="cancelAppointment(this)">Cancel</button>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+                <div class="appointment-records-list" id="past-appointments" style="display: none;">
+    {% for appointment in appointments %}
+        {% if appointment.status == 'completed' %}
+        <div class="appointment-card past">
+            <div class="appointment-info">
+                <span class="date">{{ appointment.appointment_date|date:"F j, Y" }}</span>
+                <span class="time">{{ appointment.appointment_time|time:"g:i A" }}</span>
+                <span class="doctor">{{ appointment.doctor.profile }}</span>
+                <span class="service"
+      data-service="{{ appointment.service.name|default:'N/A' }}"
+      data-service-price="{{ appointment.service.price|default_if_none:'0' }}"
+      data-sub-service="{{ appointment.sub_service.SubService|default:'N/A' }}"
+      data-sub-price="{{ appointment.sub_service.price|default_if_none:'0' }}">
+    {{ appointment.service.name }}
+</span>
+
+
+            </div>
+            <div class="appointment-actions">
+                <span class="status past">Completed</span>
+                <button class="view-btn" onclick="viewAppointmentDetails(this)">View Details</button>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ===== Appointment Details Modal ===== -->
+    <div id="appointmentModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3>Appointment Details</h3>
+            <div id="modalDetails">
+                <!-- Details will be filled by JS -->
+            </div>
+        </div>
+    </div>
+    <!-- ===== Cancel Confirmation Modal ===== -->
+    <div id="cancelModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width:340px;text-align:center;">
+            <span class="close-modal" onclick="closeCancelModal()">&times;</span>
+            <h3>Cancel Appointment</h3>
+            <p style="margin:1.5rem 0 2rem 0;">Are you sure you want to cancel your appointment?</p>
+            <button class="cancel-btn" style="background:#ef4444;color:#fff;margin-right:1rem;" onclick="confirmCancelAppointment()">Yes, Cancel</button>
+            <button class="view-btn" onclick="closeCancelModal()">No, Keep</button>
+        </div>
+    </div>
+    <!-- ===== Reschedule Info Modal ===== -->
+    <div id="reschedInfoModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width:400px;text-align:center;">
+            <span class="close-modal" onclick="closeReschedInfoModal()">&times;</span>
+            <h3>Reschedule Information</h3>
+            <div id="reschedInfoContent" style="margin:1.5rem 0 1rem 0; color:#059669; font-weight:600;">
+                <!-- Reschedule info will be filled by JS -->
+            </div>
+            <button class="view-btn" onclick="closeReschedInfoModal()">Close</button>
+        </div>
+    </div>
+    <!-- Add this new modal for confirmed appointments -->
+    <div id="confirmCancelInfoModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width:500px;text-align:center;">
+            <span class="close-modal" onclick="closeConfirmCancelInfoModal()">&times;</span>
+            <h3>Cannot Cancel Confirmed Appointment</h3>
+            <p style="margin:1.5rem 0 2rem 0;line-height:1.6;">
+                Confirmed appointments cannot be cancelled. If you wish to cancel an appointment, contact the staffs of the clinic in order for them to cancel your appointment. For more information regarding the cancellation of appointments, kindly read the <a href="{% url 'appointment_policy' %}" style="color:#059669;text-decoration:underline;">Clinic's Policy</a>.
+            </p>
+            <button class="view-btn" onclick="closeConfirmCancelInfoModal()">Close</button>
+        </div>
+    </div>
+    </div>
+
+    <!-- ===== Scripts ===== -->
+     <script src="{% static 'js/script1.js' %}"></script>
+    <script>
+    // ===== View Appointment Details Logic =====
+    function viewAppointmentDetails(button) {
+        const card = button.closest('.appointment-card');
+        const date = card.querySelector('.date').textContent;
+        const time = card.querySelector('.time').textContent;
+        const doctor = card.querySelector('.doctor').textContent;
+        const serviceSpan = card.querySelector('.service');
+
+        const serviceName = serviceSpan.getAttribute('data-service');
+        const servicePrice = parseFloat(serviceSpan.getAttribute('data-service-price')) || 0;
+        const subServiceName = serviceSpan.getAttribute('data-sub-service');
+        const subServicePrice = parseFloat(serviceSpan.getAttribute('data-sub-price')) || 0;
+
+        const total = servicePrice + subServicePrice;
+
+        document.getElementById('modalDetails').innerHTML = `
+            <p><strong>Date:</strong> ${date}</p>
+            <p><strong>Time:</strong> ${time}</p>
+            <p><strong>Doctor:</strong> ${doctor}</p>
+            <p><strong>Service:</strong> ${serviceName}</p>
+            <p><strong>Sub Service:</strong> ${subServiceName}</p>
+            <hr>
+            <p><strong>Billing Details:</strong></p>
+            <ul class="billing-list">
+                <li><span>Service Fee</span> <span>₱${servicePrice.toFixed(2)}</span></li>
+                <li><span>Sub Service Fee</span> <span>₱${subServicePrice.toFixed(2)}</span></li>
+            </ul>
+            <div class="billing-list-total"><strong>Total: ₱${total.toFixed(2)}</strong></div>
+        `;
+
+        document.getElementById('appointmentModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('appointmentModal').style.display = 'none';
+    }
+
+    let appointmentToCancel = null;
+
+    function cancelAppointment(button) {
+        appointmentToCancel = button.closest('.appointment-card');
+        
+        // Check if this is a confirmed appointment
+        if (appointmentToCancel.closest('#confirm-appointments')) {
+            // Show the info modal instead of cancel modal
+            document.getElementById('confirmCancelInfoModal').style.display = 'flex';
+        } else {
+            // Show regular cancel modal for pending appointments
+            document.getElementById('cancelModal').style.display = 'flex';
+        }
+    }
+
+    function closeCancelModal() {
+        document.getElementById('cancelModal').style.display = 'none';
+        appointmentToCancel = null;
+    }
+
+    function confirmCancelAppointment() {
+        if (!appointmentToCancel) return;
+
+        const appointmentId = appointmentToCancel.getAttribute('data-appointment-id');
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch(`/appointment/${appointmentId}/cancel/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the UI to show cancelled status
+                const statusSpan = appointmentToCancel.querySelector('.status');
+                statusSpan.textContent = 'Cancelled';
+                statusSpan.className = 'status cancelled';
+                
+                // Remove the cancel button
+                const cancelBtn = appointmentToCancel.querySelector('.cancel-btn');
+                if (cancelBtn) {
+                    cancelBtn.remove();
+                }
+            }
+            closeCancelModal();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            closeCancelModal();
+        });
+    }
+
+    function closeConfirmCancelInfoModal() {
+        document.getElementById('confirmCancelInfoModal').style.display = 'none';
+    }
+
+    // ===== Tab Switching Logic =====
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            // Remove 'active' class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            // Hide all appointment sections
+            ['pending-appointments', 'confirm-appointments', 'past-appointments'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+
+            // Show the selected section
+            const tab = this.dataset.tab;
+            const showId = tab + '-appointments';
+            const showEl = document.getElementById(showId);
+            if (showEl) showEl.style.display = 'block';
+        });
+    });
+    </script>
+
+<style>
+/* Add blur effect to all modal overlays */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 53, 92, 0.3);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(26, 53, 92, 0.15);
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0.5rem;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: #1a355c;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+{% endblock %}

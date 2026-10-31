@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Profile
+{% endblock %}
+        {% block nav %}
+            <a href="{% url 'dashboard' %}" class="sidebar-link"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
+            <a href="{% url 'appointment' %}" class="sidebar-link"><span>📅</span> <span class="sidebar-text">Appointment Records</span></a>
+            <a href="{% url 'profile' %}" class="sidebar-link active"><span>👤</span> <span class="sidebar-text">Profile</span></a>
+        {% endblock %}
+
+{% block content %}
+ <div class="dashboard-content" id="dashboardContent">
+        <!-- ===== Header with User Info ===== -->
+        <header class="dashboard-header">
+            <div class="dashboard-user">
+{% if Profile.image %}
+    <img id="navbarAvatar" src="{{ Profile.image.url }}" alt="User Avatar">
+{% else %}
+    <img id="navbarAvatar" src="{% static 'img/default.png' %}" alt="Default Avatar">
+{% endif %}    <span>Hi, {{username}}!</span>
+        <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="logout-btn">Logout</button>
+</form>
+
+</div>
+        </header>
+
+        <main class="dashboard-main">
+            <!-- ===== Patient Profile Section ===== -->
+            <section class="patient-profile-container">
+                <div class="patient-profile-card two-column">
+                    <div class="profile-left">
+                        <div class="avatar-container">
+                           <img id="patientAvatar" class="doctor-avatar"
+     src="{% if Profile.image %}{{ Profile.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
+     alt="Patient Avatar">
+    <form id="avatarForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="avatarInput">
+            <button id="cameraBtn" type="button" aria-label="Change Profile Picture">
+                <svg width="24" height="24" fill="#10b981" viewBox="0 0 24 24">
+                    <path d="M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8-9h-2.586l-1.707-1.707A.997.997 0 0 0 15 6h-6c-.265 0-.52.105-.707.293L6.586 8H4c-1.103 0-2 .897-2 2v10c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V10c0-1.103-.897-2-2-2zm0 12H4V10h16v10z"/>
+                </svg>
+            </button>
+            <input type="file" id="avatarInput" name="avatarInput" accept="image/*" style="display:none;">
+        </label>
+    </form>
+</div>
+
+                        <h2 class="patient-name">{{username}}</h2>
+                        <div class="profile-section">
+                            <h3>Personal Information</h3>
+                            <div class="patient-details">
+                                <strong>Gender:</strong> {{ Profile.get_gender_display }}<br>
+                                <strong>Date of Birth:</strong> {{ Profile.date_of_birth|date:"F j, Y" }}<br>
+                                <strong>Age:</strong> <span>{{Profile.age}}</span><br>
+                                <strong>Contact Number:</strong> <span id="contactValue">{{Profile.phone}}</span>
+                                <button class="edit-btn" onclick="openModal('changeContactModal')">Edit</button><br>
+                                <strong>Email Address:</strong> <span id="emailValue">{{ request.user.email }}</span>
+                                <button class="edit-btn" onclick="openModal('changeEmailModal')">Edit</button><br>
+                            </div>
+                        </div>
+                        <div class="profile-section">
+                            <h3>Account Information</h3>
+                            <div class="patient-details">
+                                <strong>Username:</strong> <span id="usernameValue">{{username}}</span><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-right">
+                        <div class="patient-bio">
+                            <strong>Welcome!</strong>
+                            <p>
+                                This is your personal profile page. Here you can view and update your information, manage your account, and keep your contact details up to date.
+                            </p>
+                        </div>
+                        <div class="quick-links">
+                            <h4>Quick Links</h4>
+                            <ul>
+                                <li><a href="{% url 'appointment' %}">View Appointments</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Username Modal -->
+                <div id="changeUsernameModal" class="modal-overlay" style="display:none;">
+                  <div class="modal-content">
+                    <h3>Change Username</h3>
+                    <form id="changeUsernameForm">
+                      <input type="text" id="newUsername" name="newUsername" placeholder="Enter new username" required>
+                      <div class="modal-actions">
+                        <button type="submit" class="profile-action-btn">Save</button>
+                        <button type="button" class="profile-action-btn cancel-btn" onclick="closeModal('changeUsernameModal')">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <!-- Change Password Modal -->
+                <div id="changePasswordModal" class="modal-overlay" style="display:none;">
+                  <div class="modal-content">
+                    <h3>Change Password</h3>
+                    <form id="changePasswordForm">
+                      <input type="password" id="currentPassword" name="currentPassword" placeholder="Current password" required>
+                      <input type="password" id="newPassword" name="newPassword" placeholder="New password" required>
+                      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+                      <div class="modal-actions">
+                        <button type="submit" class="profile-action-btn">Save</button>
+                        <button type="button" class="profile-action-btn cancel-btn" onclick="closeModal('changePasswordModal')">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <!-- Change Contact Number Modal -->
+                <div id="changeContactModal" class="modal-overlay" style="display:none;">
+                  <div class="modal-content">
+                    <h3>Change Contact Number</h3>
+                    <form id="changeContactForm" method="post" action="{% url 'profile' %}">
+                      {% csrf_token %}
+                      <input type="text" id="newContact" name="newContact" placeholder="Enter new contact number" required>
+                      <div class="modal-actions">
+                        <button type="submit" class="profile-action-btn">Save</button>
+                        <button type="button" class="profile-action-btn cancel-btn" onclick="closeModal('changeContactModal')">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <!-- Change Email Modal -->
+                <div id="changeEmailModal" class="modal-overlay" style="display:none;">
+                  <div class="modal-content">
+                    <h3>Change Email Address</h3>
+                    <form id="changeEmailForm" method="post" action="{% url 'profile' %}">
+                      {% csrf_token %}
+                      <input type="email" id="newEmail" name="newEmail" placeholder="Enter new email address" required>
+                      <div class="modal-actions">
+                        <button type="submit" class="profile-action-btn">Save</button>
+                        <button type="button" class="profile-action-btn cancel-btn" onclick="closeModal('changeEmailModal')">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+            </section>
+        </main>
+    </div>
+  </div>
+    <script src="{% static 'js/script1.js'%} "></script>
+    <script>
+    // Auto-calculate age from DOB
+    function calculateAge(dob) {
+        const birth = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set age (DOB format: YYYY-MM-DD)
+        const dob = '2000-01-01';
+        const ageSpan = document.getElementById('patientAge');
+        if (ageSpan) ageSpan.textContent = calculateAge(dob);
+
+        // Handle form submissions
+        const changeContactForm = document.getElementById('changeContactForm');
+        const changeEmailForm = document.getElementById('changeEmailForm');
+
+        if (changeContactForm) {
+            changeContactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                formData.append('action', 'update_contact');
+                fetch('{% url "profile" %}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('contactValue').textContent = data.new_contact;
+                        closeModal('changeContactModal');
+                        alert('Contact number updated successfully!');
+                    } else {
+                        alert('Error updating contact number: ' + data.error);
+                    }
+                });
+            });
+        }
+
+        if (changeEmailForm) {
+            changeEmailForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                formData.append('action', 'update_email');
+                fetch('{% url "profile" %}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('emailValue').textContent = data.new_email;
+                        closeModal('changeEmailModal');
+                        alert('Email updated successfully!');
+                    } else {
+                        alert('Error updating email: ' + data.error);
+                    }
+                });
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const avatarInput = document.getElementById('avatarInput');
+        const avatarForm = document.getElementById('avatarForm');
+        const cameraBtn = document.getElementById('cameraBtn');
+
+        // When the camera button is clicked, trigger the hidden file input
+        cameraBtn.addEventListener('click', function() {
+            avatarInput.click();
+        });
+
+        // When a file is selected in the input, submit the form
+        avatarInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) { // Check if a file was actually selected
+                avatarForm.submit();
+            }
+        });
+    });
+</script>
+
+<style>
+.edit-btn {
+    background: none;
+    border: none;
+    color: #3498db;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-left: 10px;
+    padding: 2px 5px;
+    text-decoration: underline;
+}
+
+.edit-btn:hover {
+    color: #2980b9;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,200 @@
+    {% extends 'admin_base.html' %}
+    {% block title %} No Show {% endblock %}
+
+    {% block content %}
+    
+<!-- Main Dashboard Content -->
+<div class="dashboard-content" id="dashboardContent">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-user">
+            <span>Welcome!</span>
+            <!-- Logout Form -->
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Dashboard Main -->
+    <main class="dashboard-main">
+        <section class="admin-dashboard-overview">
+            <h2 class="admin-dashboard-title">Welcome back, Admin!</h2>
+
+<div class="no-show-appointments status-no-show">
+  <div class="section-header">
+    <h3 class="section-title">No Show Appointments</h3>
+  </div>
+<form method="get" class="search-form">
+  <input type="text" name="q" placeholder="Search by patient, doctor, or email…" value="{{ request.GET.q }}">
+  <button type="submit">Search</button>
+</form>
+  <div class="table-scroll-x">
+    <table class="dashboard-table no-show-table">
+      <thead>
+        <tr>
+          <th>Patient</th>
+          <th>Email</th>
+          <th>Doctor</th>
+          <th>Service</th>
+          <th>Sub-Service</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for appointment in appointments %}
+        <tr>
+  <td>{{ appointment.patient.profile.user.get_full_name|default:appointment.patient.profile.user.username }}</td>
+  <td>{{ appointment.patient.profile.user.email }}</td>
+  <td>{{ appointment.doctor.profile.user.get_full_name|default:appointment.doctor.profile.user.username }}</td>
+  <td>{{ appointment.service.name }}</td>
+  <td>{{ appointment.sub_service.SubService }}</td>
+  <td>{{ appointment.appointment_date }}</td>
+  <td>{{ appointment.appointment_time|time:"h:i A" }}</td>
+          <td>
+            <span class="status-tag no-show">{{ appointment.get_status_display }}</span>
+          </td>
+          <td>
+            <button class="action-btn follow-up" data-appointment-id="{{ appointment.id }}" onclick="sendFollowUp(this)">Follow Up</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9">No appointments marked as no-show.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Follow-up Success Message -->
+<div id="followUpSuccessMessage" class="alert-overlay" style="display:none;">
+    <div class="alert-message">
+        <div class="alert-content">
+            <p class="alert-text">Follow-up email has been sent successfully!</p>
+            <div class="alert-buttons">
+                <button onclick="closeFollowUpMessage()" class="alert-btn proceed">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        </section>
+    </main>
+</div>
+
+<style>
+.alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 53, 92, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.alert-message {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 90%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.alert-content {
+    padding: 1.5rem;
+}
+
+.alert-text {
+    color: #1a355c;
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+}
+
+.alert-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.alert-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.alert-btn.proceed {
+    background: #059669;
+    color: white;
+}
+
+.alert-btn.proceed:hover {
+    background: #047857;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<script>
+function sendFollowUp(button) {
+    const appointmentId = button.getAttribute('data-appointment-id');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch(`/appointments/${appointmentId}/follow-up/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('followUpSuccessMessage').style.display = 'flex';
+        } else {
+            alert('Failed to send follow-up email. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while sending the follow-up email.');
+    });
+}
+
+function closeFollowUpMessage() {
+    document.getElementById('followUpSuccessMessage').style.display = 'none';
+}
+
+// Close notification if clicking outside
+window.onclick = function(event) {
+    const overlay = document.getElementById('followUpSuccessMessage');
+    if (event.target === overlay) {
+        closeFollowUpMessage();
+    }
+}
+</script>
+
+    {% endblock %}
