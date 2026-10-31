@@ -1,0 +1,347 @@
+body {
+    background: #f6f8fb;
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    min-height: 100vh;
+}
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 2px 0 16px rgba(26, 53, 92, 0.08);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: width 0.3s, background 0.3s;
+    backdrop-filter: blur(8px);
+}
+.sidebar.collapsed {
+    width: 60px;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: none;
+}
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1rem 1.2rem 1.2rem;
+}
+.ehr-logo {
+    background: rgb(0, 161, 93);
+    color: #fff;
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    text-align: center;
+}
+.sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #1a355c;
+    cursor: pointer;
+    outline: none;
+    margin-left: 0.5rem;
+}
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.2rem;
+    color: #1a355c;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    font-size: 1rem;
+}
+.sidebar-link.active,
+.sidebar-link:hover {
+    background: rgba(0,161,93,0.08);
+    color: rgb(0,161,93);
+}
+
+/* Make active/hover span full width when collapsed */
+.sidebar.collapsed .sidebar-link.active,
+.sidebar.collapsed .sidebar-link:hover {
+    width: 100%;
+    justify-content: center;
+    background: rgba(0,161,93,0.18);
+    border-radius: 8px;
+}
+.sidebar.collapsed .sidebar-text {
+    display: none;
+}
+.sidebar.collapsed {
+    width: 60px;
+}
+.sidebar.collapsed .sidebar-header {
+    justify-content: flex-end;
+    padding-left: 0;
+}
+.sidebar.collapsed .ehr-logo {
+    display: none;
+}
+.sidebar.collapsed .sidebar-toggle {
+    margin-left: 0;
+    display: block;
+}
+.sidebar.collapsed .sidebar-nav {
+    align-items: center;
+}
+.sidebar.collapsed .sidebar-link {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+.dashboard-content {
+    min-height: 100vh;
+    width: 100%;
+    margin-left: 0;
+    transition: filter 0.3s;
+}
+.sidebar-blur {
+    filter: blur(3px) brightness(0.97);
+    pointer-events: none;
+    user-select: none;
+}
+.sidebar.collapsed ~ .dashboard-content {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+}
+.dashboard-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: rgb(0, 161, 93);
+    height: 64px;
+    padding: 0 2rem;
+    box-shadow: 0 2px 12px rgba(26, 53, 92, 0.06);
+}
+.dashboard-user {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+.dashboard-user img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgb(0, 161, 93);
+}
+.dashboard-user span {
+    font-weight: 500;
+    color: #fff;
+    font-size: 18px;
+}
+.dashboard-main {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding-left: 32px !important; /* Add space ONLY when sidebar is expanded */
+}
+.logout-btn {
+    margin-left: 18px;
+    padding: 0.4em 1.2em;
+    background: transparent;
+    color: white;
+    border: 2px solid #fff;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    vertical-align: middle;
+}
+.logout-btn:hover {
+    background: rgb(255, 255, 255);
+    color: rgb(0, 161, 93);
+}
+/* Remove the extra padding when sidebar is collapsed */
+.sidebar.collapsed ~ .dashboard-content .dashboard-main {
+    padding-left: 0 !important;
+}
+
+/* Responsive: remove padding on small screens */
+@media (max-width: 900px) {
+    .dashboard-main,
+    .sidebar.collapsed ~ .dashboard-content .dashboard-main {
+        padding-left: 0 !important;
+    }
+}
+
+/* Appointment Form Styles */
+.appointment-main {
+    display: flex;
+    gap: 2.5rem;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    flex-wrap: wrap;
+}
+
+.appointment-form-container {
+    background: #fff;
+    max-width: 420px;
+    min-width: 320px;
+    margin: 0;
+    padding: 2.5rem 2rem 2rem 2rem;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(26, 53, 92, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 340px;
+}
+
+.appointment-form-container h2 {
+    color: #10b981;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+label {
+    font-weight: 600;
+    color: #1a355c;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.required {
+    color: #ef4444;
+    font-size: 1.1em;
+}
+
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #f9fafb;
+    color: #1a355c;
+    transition: border 0.2s;
+    margin-top: 0.2rem;
+    box-sizing: border-box;
+}
+
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus,
+textarea:focus {
+    border: 1.5px solid #10b981;
+    outline: none;
+    background: #fff;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 60px;
+    max-height: 180px;
+}
+
+button[type="submit"] {
+    background: #10b981;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.9rem 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(16,185,129,0.08);
+}
+
+button[type="submit"]:hover {
+    background: #059669;
+}
+
+.appointment-calendar-container {
+    background: #fff;
+    min-width: 320px;
+    max-width: 400px;
+    flex: 1 1 320px;
+    margin: 0;
+    padding: 2.5rem 2rem 2rem 2rem;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(26, 53, 92, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.appointment-calendar-container h2 {
+    color: #10b981;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.calendar-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    width: 100%;
+    background: #f6f8fb;
+    border-radius: 12px;
+    padding: 1.5rem 0.5rem;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    .appointment-form-container {
+        max-width: 98vw;
+        padding: 1.2rem 0.5rem;
+    }
+    form {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .appointment-main {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+        padding-left: 0 !important;
+    }
+    .appointment-form-container,
+    .appointment-calendar-container {
+        max-width: 98vw;
+        min-width: unset;
+        margin: 0 auto;
+    }
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LE Dental Clinic - Book Appointment</title>
+    <!-- Flatpickr Calendar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="appointment_form.css">
+</head>
+<body>
+    <!-- ===== Sidebar Navigation ===== -->
+    <aside class="sidebar collapsed" id="sidebar">
+        <div class="sidebar-header">
+            <span class="ehr-logo">LE Dental Clinic</span>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span id="sidebarToggleIcon">&#9776;</span>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="patient_dashboard.html" class="sidebar-link active"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
+            <a href="#" class="sidebar-link"><span>📄</span> <span class="sidebar-text">Health Records</span></a>
+            <a href="appointment_records.html" class="sidebar-link"><span>📅</span> <span class="sidebar-text">Appointment Records</span></a>
+            <a href="patient_profile.html" class="sidebar-link"><span>👤</span> <span class="sidebar-text">Profile</span></a>
+        </nav>
+    </aside>
+
+    <!-- ===== Main Dashboard Content ===== -->
+    <div class="dashboard-content" id="dashboardContent">
+        <!-- ===== Header with User Info ===== -->
+        <header class="dashboard-header">
+            <div class="dashboard-user">
+                <img id="navbarAvatar" src="https://scontent.fmnl30-3.fna.fbcdn.net/v/t39.30808-6/469984245_3904115036572694_3646693016826261098_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=xdyaQbkjOhMQ7kNvwEZmkD3&_nc_oc=AdmsxP4klAV_wCHpzQ7e1JaOPJ4ZizGEsQ3yFW89XtgACT6xyslNpr2H6iQRUUHC-qw&_nc_zt=23&_nc_ht=scontent.fmnl30-3.fna&_nc_gid=fGB9mGtLdZ8dO7axjT7pWg&oh=00_AfPs91_CEwePyqV74c1NQnIvBvq8OJgK9W26xkkX9wVKdQ&oe=68490CC9" alt="Patient Avatar">
+                <span>Hi, [Patient Name]!</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <main class="dashboard-main appointment-main">
+            <!-- ===== Appointment Form Section ===== -->
+            <section class="appointment-form-container">
+                <h2>Book an Appointment</h2>
+                <form id="appointmentForm">
+                    <!-- Service Type -->
+                    <label for="serviceType">Type of Service <span class="required">*</span></label>
+                    <select id="serviceType" name="serviceType" required>
+                        <option value="">Select a service</option>
+                        <option value="service_1">Service 1</option>
+                        <option value="service_2">Service 2</option>
+                        <option value="service_3">Service 3</option>
+                    </select>
+
+                    <!-- Sub-Service Type (populated by JS) -->
+                    <label for="subServiceType">Sub-Service <span class="required">*</span></label>
+                    <select id="subServiceType" name="subServiceType" required disabled>
+                        <option value="">Select a sub-service</option>
+                        <!-- Options will be populated by JS -->
+                    </select>
+
+                    <!-- Doctor Selection -->
+                    <label for="doctorName">Doctor <span class="required">*</span></label>
+                    <input type="text" id="doctorName" name="doctorName" value="" readonly required style="background:#f3f4f6; border-radius:6px; border:1.5px solid #d1d5db; padding:10px; font-size:1rem;">
+                    <span id="doctorLockedMsg" style="display:none; color:#10b981; font-size:0.98em; margin-top:4px;">
+    You chose this doctor from the availability list.
+</span>
+
+                    <!-- Date Picker -->
+                    <label for="appointmentDate">Date <span class="required">*</span></label>
+                    <input type="date" id="appointmentDate" name="appointmentDate" required>
+
+                    <!-- Time Picker -->
+                    <label for="appointmentTime">Time <span class="required">*</span></label>
+                    <select id="appointmentTime" name="appointmentTime" required>
+                        <option value="">Select a time</option>
+                        <option value="09:00 AM">9:00 AM</option>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:00 AM">11:00 AM</option>
+                        <option value="12:00 PM">12:00 PM</option>
+                        <option value="01:00 PM">1:00 PM</option>
+                        <option value="02:00 PM">2:00 PM</option>
+                        <option value="03:00 PM">3:00 PM</option>
+                        <option value="04:00 PM">4:00 PM</option>
+                    </select>
+
+                    <!-- Notes -->
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Add any notes for your doctor..."></textarea>
+
+                    <!-- Submit Button -->
+                    <button type="submit">Book Appointment</button>
+                </form>
+            </section>
+
+            <!-- ===== Calendar Widget Section ===== -->
+            <section class="appointment-calendar-container">
+                <h2>Calendar</h2>
+                <div id="calendar-widget"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ===== Scripts ===== -->
+    <!-- Flatpickr Calendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Custom JS for Appointment Form -->
+    <script src="script1.js"></script>
+</body>
+</html>
