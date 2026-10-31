@@ -41,6 +41,7 @@ A web-based healthcare management platform designed to streamline patient schedu
    ```bash
    git clone <YOUR_REPO_URL>
    cd EHR-main
+   ```
 
 2. **Create and activate a virtual environment:**
   ```bash
@@ -51,24 +52,29 @@ A web-based healthcare management platform designed to streamline patient schedu
   # Linux/macOS
   python3 -m venv venv
   source venv/bin/activate
+   ```
 
 3. **Install dependencies:**
   ```bash
   pip install -r requirements.txt
+   ```
 
 4. **Configure environment variables:**
   Copy the sample environment file and provide your email and database configurations:
 
-  Bash
+  ```bash
   cp .env.sample .env
+   ```
 
 5. **Run database migrations:**
   ```bash
   python manage.py migrate
+   ```
 
 6. **Start the development server:**
-  Bash
+```bash
   python manage.py runserver
+```
 
 7. **Visit http://127.0.0.1:8000/ in your browser.**
 
